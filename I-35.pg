@@ -11,7 +11,7 @@ loadMacros(
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;
 
-$f = FEQ("x for x in (0,12] using color:blue and weight:2");
+$f = FEQ("1.3- 2x/5 for x in <0,12> using color:blue and weight:2");
 $gr=init_graph(0,-4,12,4,'axes'=>[0,0],'grid'=>[12,8],'size'=>[300,200]);
 plot_functions($gr, $f, $f);
 $gr -> lb('reset');
@@ -24,9 +24,9 @@ $LN = "Largest Negative";
 $aw = 15;
 $equal = Compute("A=B=C=D=E");
 
-# >> [@ image(insertGraph($gr), width=>300, height=>200) @]* <<
 BEGIN_PGML
 
+>> [@ image(insertGraph($gr), width=>300, height=>200) @]* <<
     ---
     An object's motion is represented by the
     *position vs. time* graph at the top of the page.
