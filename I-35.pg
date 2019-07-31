@@ -1,0 +1,57 @@
+DOCUMENT();
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+    "PGgraphmacros.pl",
+    "PGauxiliaryFunctions.pl",
+    "contextOrdering.pl"
+  );
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$f = FEQ("x for x in (0,12] using color:blue and weight:2");
+$gr=init_graph(0,-4,12,4,'axes'=>[0,0],'grid'=>[12,8],'size'=>[300,200]);
+plot_functions($gr, $f, $f);
+$gr -> lb('reset');
+
+Context("Ordering");
+Letters("A","B","C","D","E");
+
+$LP = "Largest Positive";
+$LN = "Largest Negative";
+$aw = 15;
+$equal = Compute("A=B=C=D=E");
+
+# >> [@ image(insertGraph($gr), width=>300, height=>200) @]* <<
+BEGIN_PGML
+
+    ---
+    An object's motion is represented by the
+    *position vs. time* graph at the top of the page.
+
+a. Rank the object's position at the lettered times.
+    >> [$LP] [__]{answer=>Compute("A>B>C>D>E"),width=>$aw} [$LN] <<
+
+b. Rank the object's velocity at the lettered times.
+    >> [$LP] [__]{answer=>$equal, width=>15} [$LN] <<
+
+c. Rank the object's acceleration at the lettered times.
+    >> [$LP] [__]{answer=>Compute("A=B=C=D=E"),width=>$aw} [$LN] <<
+
+    ---
+    An object's motion is represented by the
+    *velocity vs. time* graph at the top of the page.
+
+d. Rank the object's position at the lettered times.
+    >> [$LP] [__]{answer=>Compute("A=B>C>D>E"), width=>$aw} [$LN] <<
+
+e. Rank the object's velocity at the lettered times.
+    >>  [$LP] [__]{answer=>Compute("A>B>C>D>E"), width=>$aw} [$LN] <<
+
+f. Rank the object's acceleration at the lettered times.
+    >> [$LP] [__]{answer=>$equal, width=>$aw} [$LN] <<
+
+END_PGML
+ENDDOCUMENT();
