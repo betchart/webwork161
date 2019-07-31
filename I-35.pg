@@ -15,12 +15,18 @@ $f = FEQ("1.2- 2x/5 for x in <0,12> using color:blue and weight:2");
 $gr = init_graph(0,-4,12,4,'axes'=>[0,0],'grid'=>[12,8],'size'=>[300,200]);
 $alt = '"Graph of negative sloping line with y-intercept between A and B."';
 $tags = sprintf('title=%s alt=%s', $alt, $alt);
-plot_functions($gr, $f, $f);
-$gr -> lb('reset');
+plot_functions($gr, $f);
+$gr->lb('reset');
+
+my @letter = ("A", "B", "C", "D", "E");
+my @pos = (2, 4, 5, 7, 10);
+
+foreach my $i (0..4) {
+    $gr->lb(new Label($pos[$i], -0.5, $letter[$i], 'black', 'center', 'middle','giant'));
+}
 
 Context("Ordering");
 Letters("A","B","C","D","E");
-
 
 $LP = "Largest Positive";
 $LN = "Largest Negative";
