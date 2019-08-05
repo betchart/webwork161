@@ -31,6 +31,7 @@ Letters(keys %labels);
 $query = "Rank the object's %s at the lettered times.";
 $blank = "Largest Positive [__]{answer=>Compute('%s'), width=>15} Largest Negative";
 $equal = join("=", keys %labels);
+$chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
 
 BEGIN_PGML
 
@@ -62,4 +63,9 @@ f. [@ sprintf($query, "acceleration");@]
     >> [@ sprintf($blank, $equal);@]** <<
 
 END_PGML
+
+BEGIN_PGML_HINT
+Answers can only include: {*\ [@ $chars @] \ *}
+END_PGML_HINT
+
 ENDDOCUMENT();
