@@ -18,20 +18,18 @@ $tags = sprintf('title=%s alt=%s', $alt, $alt);
 plot_functions($gr, $f);
 $gr->lb('reset');
 
-my @letter = ("A", "B", "C", "D", "E");
-my @pos = (2, 4, 5, 7, 10);
+my %labels = ( A => 2, B => 4, C => 5, D => 7, E => 10 );
 
-foreach my $i (0..4) {
-    $gr->lb(new Label($pos[$i], -0.5, $letter[$i], 'black', 'center', 'middle','giant'));
+foreach (keys %labels) {
+  $gr->lb(new Label($labels{$_}, -0.5, $_, 'black', 'center', 'middle', 'giant'));
 }
 
 Context("Ordering");
-Letters("A","B","C","D","E");
+Letters(keys %labels);
 
-$LP = "Largest Positive";
-$LN = "Largest Negative";
-$aw = 15;
-$equal = Compute("A=B=C=D=E");
+$query = "Rank the object's %s at the lettered times.";
+$blank = "Largest Positive [__]{answer=>Compute('%s'), width=>15} Largest Negative";
+$equal = join("=", keys %labels);
 
 BEGIN_PGML
 
@@ -40,27 +38,27 @@ BEGIN_PGML
     An object's motion is represented by the
     *position vs. time* graph at the top of the page.
 
-a. Rank the object's position at the lettered times.
-    >> [$LP] [__]{answer=>Compute("A>B>C>D>E"),width=>$aw} [$LN] <<
+a. [@ sprintf($query, "position");@]
+    >> [@ sprintf($blank, "A>B>C>D>E");@]** <<
 
-b. Rank the object's velocity at the lettered times.
-    >> [$LP] [__]{answer=>$equal, width=>15} [$LN] <<
+b. [@ sprintf($query, "velocity");@]
+    >> [@ sprintf($blank, $equal);@]** <<
 
-c. Rank the object's acceleration at the lettered times.
-    >> [$LP] [__]{answer=>Compute("A=B=C=D=E"),width=>$aw} [$LN] <<
+c. [@ sprintf($query, "acceleration");@]
+    >> [@ sprintf($blank, $equal);@]** <<
 
     ---
     An object's motion is represented by the
     *velocity vs. time* graph at the top of the page.
 
-d. Rank the object's position at the lettered times.
-    >> [$LP] [__]{answer=>Compute("A=B>C>D>E"), width=>$aw} [$LN] <<
+d. [@ sprintf($query, "position"); @]
+    >> [@ sprintf($blank, "A=B>C>D>E");@]** <<
 
-e. Rank the object's velocity at the lettered times.
-    >>  [$LP] [__]{answer=>Compute("A>B>C>D>E"), width=>$aw} [$LN] <<
+e. [@ sprintf($query, "velocity"); @]
+    >> [@ sprintf($blank, "A>B>C>D>E");@]** <<
 
-f. Rank the object's acceleration at the lettered times.
-    >> [$LP] [__]{answer=>$equal, width=>$aw} [$LN] <<
+f. [@ sprintf($query, "acceleration");@]
+    >> [@ sprintf($blank, $equal);@]** <<
 
 END_PGML
 ENDDOCUMENT();
