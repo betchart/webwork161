@@ -11,8 +11,9 @@ loadMacros(
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;
 
+$refreshCachedImages=1;
 $f = FEQ("1.2- 2x/5 for x in <0,12> using color:blue and weight:2");
-$gr = init_graph(0,-4,12,4,'axes'=>[0,0],'grid'=>[12,8],'size'=>[300,200]);
+$gr = init_graph(0,-4,12,4,'axes'=>[0,0],'grid'=>[12,8],'size'=>[333,222]);
 $alt = '"Graph of negative sloping line with y-intercept between A and B."';
 $tags = sprintf('title=%s alt=%s', $alt, $alt);
 plot_functions($gr, $f);
@@ -33,7 +34,7 @@ $equal = join("=", keys %labels);
 
 BEGIN_PGML
 
->> [@ image(insertGraph($gr), width=>300, height=>200, extra_html_tags=>$tags) @]* <<
+>> [@ image(insertGraph($gr), width=>450, extra_html_tags=>$tags) @]* <<
     ---
     An object's motion is represented by the
     *position vs. time* graph at the top of the page.
