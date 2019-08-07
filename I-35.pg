@@ -28,10 +28,23 @@ foreach (keys %labels) {
 Context("Ordering");
 Letters(keys %labels);
 
-$query = "Rank the object's %s at the lettered times.";
-$blank = "Largest Positive [__]{answer=>Compute('%s'), width=>15} Largest Negative";
-$equal = join("=", keys %labels);
-$chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
+$lt = "<"; $gt = ">"; $qt = '"';
+%subs = ('"' => '[$qt]*', "<" => '[$lt]*', ">" => '[$gt]*');
+sub tagsub {
+     my $val = $_[0];
+     for my $i (keys %subs) {
+        $val =~ s/$i/$subs{$i}/g;
+     }
+     return $val;
+}
+
+sub question {
+    $prompt = sprintf("Rank the object's %s at the lettered times.", $_[0]);
+    $blank = sprintf("Largest Positive [__]{answer=>Compute('%s'), width=>15} Largest Negative", $_[1]);
+    $title = "Use equal (=) or greater (>) to rank all letters; for example, 'A>B=C'";
+    $div = sprintf('<div align="center" title="%s">', $title);
+    return $prompt . tagsub($div) . $blank . tagsub('</div>');
+}
 
 BEGIN_PGML
 
@@ -40,32 +53,28 @@ BEGIN_PGML
     An object's motion is represented by the
     *position vs. time* graph at the top of the page.
 
-a. [@ sprintf($query, "position");@]
-    >> [@ sprintf($blank, "A>B>C>D>E");@]** <<
+a. [@ question("position", "A>B>C>D>E") @]**
 
-b. [@ sprintf($query, "velocity");@]
-    >> [@ sprintf($blank, $equal);@]** <<
+b. [@ question("velocity", "A=B=C=D=E") @]**
 
-c. [@ sprintf($query, "acceleration");@]
-    >> [@ sprintf($blank, $equal);@]** <<
+c. [@ question("acceleration", "A=B=C=D=E") @]**
 
     ---
     An object's motion is represented by the
     *velocity vs. time* graph at the top of the page.
 
-d. [@ sprintf($query, "position"); @]
-    >> [@ sprintf($blank, "A=B>C>D>E");@]** <<
+d. [@ question("position", "A=B>C>D>E") @]**
 
-e. [@ sprintf($query, "velocity"); @]
-    >> [@ sprintf($blank, "A>B>C>D>E");@]** <<
+e. [@ question("velocity", "A>B>C>D>E") @]**
 
-f. [@ sprintf($query, "acceleration");@]
-    >> [@ sprintf($blank, $equal);@]** <<
+f. [@ question("acceleration", "A=B=C=D=E") @]**
 
 END_PGML
 
+$chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
+
 BEGIN_PGML_HINT
-Answers can only include: {*\ [@ $chars @] \ *}
+Answers can only include: {*\ [@ $chars @] \ *};
 END_PGML_HINT
 
 ENDDOCUMENT();
