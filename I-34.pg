@@ -1,0 +1,121 @@
+DOCUMENT();
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+    "PGgraphmacros.pl",
+    "PGauxiliaryFunctions.pl",
+    "contextOrdering.pl"
+  );
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$refreshCachedImages=1;
+$f = FEQ("3x/5 -3 for x in <0,12> using color:blue and weight:2");
+$gr = init_graph(0,-4,12,4,'axes'=>[0,0],'grid'=>[12,8],'size'=>[333,222]);
+$alt = '"Graph of negative sloping line with y-intercept at C."';
+$tags = sprintf('title=%s alt=%s', $alt, $alt);
+plot_functions($gr, $f);
+$gr->lb('reset');
+
+my %labels = ( A => 2, B => 4, C => 5, D => 7, E => 10 );
+
+foreach (keys %labels) {
+  $gr->lb(new Label($labels{$_}, -0.5, $_, 'black', 'center', 'middle', 'giant'));
+}
+
+Context("Ordering");
+Letters(keys %labels);
+
+$lt = "<"; $gt = ">"; $qt = '"';
+%subs = ('"' => '[$qt]*', "<" => '[$lt]*', ">" => '[$gt]*');
+sub tagsub {
+     my $val = $_[0];
+     for my $i (keys %subs) {
+        $val =~ s/$i/$subs{$i}/g;
+     }
+     return $val;
+}
+
+sub question {
+    $prompt = sprintf("Rank the object's %s at the lettered times.", $_[0]);
+    $blank = sprintf("Largest Positive".
+                     " [__]{answer=>Compute('%s'), width=>15} ".
+		     "Largest Negative", $_[1]);
+    $title = "Use equal (=) or greater (>) to rank letters; for example, 'A>B=C'";
+    $div = sprintf('<div align="center" title="%s" style="height:50px;">', $title);
+    return $prompt . tagsub($div) . $blank . tagsub('</div>');
+}
+
+BEGIN_PGML
+
+>> [@ image(insertGraph($gr), width=>450, extra_html_tags=>$tags) @]* <<
+    ---
+    An object's motion is represented by the
+    *position vs. time* graph at the top of the page.
+
+a. [@ question("position", "E>D>C>B>A") @]**
+
+b. [@ question("velocity", "A=B=C=D=E") @]**
+
+c. [@ question("acceleration", "A=B=C=D=E") @]**
+
+    ---
+    An object's motion is represented by the
+    *velocity vs. time* graph at the top of the page.
+
+d. [@ question("position", "E>A>D>B>C") @]**
+
+e. [@ question("velocity", "E>D>C>B>A") @]**
+
+f. [@ question("acceleration", "A=B=C=D=E") @]**
+
+END_PGML
+
+
+$chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
+
+BEGIN_PGML_HINT
+Answers can only include: {*\ [@ $chars @] \ *};
+END_PGML_HINT
+
+
+
+BEGIN_PGML_SOLUTION
+*SOLUTION*
+
+a. Position is represented by the *y-value* on a position graph, which
+is decreasing.
+
+b. Velocity is represented by the *slope* on a position graph, which
+is not changing.
+
+c. Acceleration is represented by the *change in slope* on a position
+graph (*concavity*), which is zero everywhere.
+
+    ---
+
+d. Change in position is represented by the *area* under the velocity
+graph.  Notice that regardless of where the origin is located, the
+turn-around point (C) is the leftmost position.
+
+e. Velocity is represented by the *y-value* on a velocity graph, which
+is decreasing.
+
+f. Acceleration is represented by the *slope* on a velocity graph,
+which is not changing.
+
+
+*Reference material*
+
+* Slope: [@ htmlLink("https://en.wikipedia.org/wiki/Slope",
+                     "wikipedia article") @]*
+
+* Concavity: [@ htmlLink("https://en.wikipedia.org/wiki/Second_derivative#Concavity",
+                         "wikipedia article") @]*
+
+END_PGML_SOLUTION
+
+
+ENDDOCUMENT();
