@@ -41,8 +41,8 @@ sub tagsub {
 sub question {
     $prompt = sprintf("Rank the object's %s at the lettered times.", $_[0]);
     $blank = sprintf("Largest Positive [__]{answer=>Compute('%s'), width=>15} Largest Negative", $_[1]);
-    $title = "Use equal (=) or greater (>) to rank all letters; for example, 'A>B=C'";
-    $div = sprintf('<div align="center" title="%s">', $title);
+    $title = "Use equal (=) or greater (>) to rank letters; for example, 'A>B=C'";
+    $div = sprintf('<div align="center" title="%s" style="height:50px;">', $title);
     return $prompt . tagsub($div) . $blank . tagsub('</div>');
 }
 
@@ -76,5 +76,29 @@ $chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
 BEGIN_PGML_HINT
 Answers can only include: {*\ [@ $chars @] \ *};
 END_PGML_HINT
+
+BEGIN_PGML_SOLUTION
+*SOLUTION*
+
+a. Position is represented by the *y-value* on a position graph.
+
+b. Velocity is represented by the *slope* on a position graph.
+
+c. Acceleration is represented by the *change in slope* on a position graph (*concavity*).
+
+d. Change in position is represented by the *area* under the velocity graph.
+
+e. Velocity is represented by the *y-value* on a velocity graph.
+
+f. Acceleration is represented by the *slope* on a velocity graph.
+
+*Reference material*
+
+* Slope: [@ htmlLink("https://en.wikipedia.org/wiki/Slope", "wikipedia article") @]*
+
+* Concavity: [@ htmlLink("https://en.wikipedia.org/wiki/Second_derivative#Concavity", "wikipedia article") @]*
+
+END_PGML_SOLUTION
+
 
 ENDDOCUMENT();
