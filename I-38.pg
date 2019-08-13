@@ -6,7 +6,8 @@ loadMacros(
     "PGcourse.pl",
     "PGgraphmacros.pl",
     "PGauxiliaryFunctions.pl",
-    "contextOrdering.pl"
+    "contextOrdering.pl",
+    "PGessaymacros.pl",
   );
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;
@@ -66,9 +67,12 @@ BEGIN_PGML
 
 >> [@ image(insertGraph($gr), width=>450, extra_html_tags=>$tags) @]* <<
     ---
+
 [@ question("distance traveled by", $solution) @]**
 
 Explain the reason for your ranking:
+
+>> [@ ANS(essay_cmp); essay_box(5,50); @]* <<
 
 END_PGML
 
