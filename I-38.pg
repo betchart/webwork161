@@ -46,7 +46,7 @@ sub tagsub {
 }
 
 sub question {
-    $prompt = sprintf("Rank the object's %s at the lettered times.", $_[0]);
+    $prompt = sprintf("Rank these graphs on the basis of the %s each object.", $_[0]);
     $blank = sprintf("Largest Positive".
                      " [__]{answer=>Compute('%s'), width=>15} ".
 		     "Largest Negative", $_[1]);
@@ -59,27 +59,11 @@ BEGIN_PGML
 
 >> [@ image(insertGraph($gr), width=>450, extra_html_tags=>$tags) @]* <<
     ---
-    An object's motion is represented by the
-    *position vs. time* graph at the top of the page.
+[@ question("distance traveled by", "F>A>E>B=D>C") @]**
 
-a. [@ question("position", "E>D>C>B>A") @]**
-
-b. [@ question("velocity", "A=B=C=D=E") @]**
-
-c. [@ question("acceleration", "A=B=C=D=E") @]**
-
-    ---
-    An object's motion is represented by the
-    *velocity vs. time* graph at the top of the page.
-
-d. [@ question("position", "E>A>D>B>C") @]**
-
-e. [@ question("velocity", "E>D>C>B>A") @]**
-
-f. [@ question("acceleration", "A=B=C=D=E") @]**
+Explain the reason for your ranking:
 
 END_PGML
-
 
 $chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
 
@@ -92,35 +76,16 @@ END_PGML_HINT
 BEGIN_PGML_SOLUTION
 *SOLUTION*
 
-a. Position is represented by the *y-value* on a position graph, which
-is decreasing.
+[``` F>A>E>D=B>C```]
 
-b. Velocity is represented by the *slope* on a position graph, which
-is not changing.
-
-c. Acceleration is represented by the *change in slope* on a position
-graph (*concavity*), which is zero everywhere.
-
-    ---
-
-d. Change in position is represented by the *area* under the velocity
-graph.  Notice that regardless of where the origin is located, the
-turn-around point (C) is the leftmost position.
-
-e. Velocity is represented by the *y-value* on a velocity graph, which
-is decreasing.
-
-f. Acceleration is represented by the *slope* on a velocity graph,
-which is not changing.
-
-
-*Reference material*
-
-* Slope: [@ htmlLink("https://en.wikipedia.org/wiki/Slope",
-                     "wikipedia article") @]*
-
-* Concavity: [@ htmlLink("https://en.wikipedia.org/wiki/Second_derivative#Concavity",
-                         "wikipedia article") @]*
+The faster you travel, the more distance you travel. The direction you
+are headed is not important. Therefore, [`F`] travels the largest
+distance because it is always moving the fastest, followed by
+[`A`]. [`E`] is consistently traveling faster than [`D`], so it covers
+a larger distance than [`D`]. [`B`] and [`D`] always travel at the
+same speed (although in opposite directions) so they cover the same
+distance, therefore they are ranked as equal. [`C`] travels the slowest
+so it covers the least distance.
 
 END_PGML_SOLUTION
 
