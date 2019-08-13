@@ -12,11 +12,13 @@ TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;
 
 $refreshCachedImages=1;
-my %labels = ( A => [3,3,], B => [0,2,], C => [0,1,], D => [0,-2,], E => [-1,-3,], F => [-4,-4,] );
+my %labels = ( A => [3,3,], B => [0,2,], C => [0,1,],
+               D => [0,-2,], E => [-1,-3,], F => [-4,-4,] );
 sub makeF {
-    $lo = $labels{$_[0]}[0];
-    $hi = $labels{$_[0]}[1];
-    return FEQ(sprintf("%s + (%s/11)x for x in <0,11.2> using color:blue and weight:2", $lo, $hi - $lo));
+    my $lo = $labels{$_[0]}[0];
+    my $hi = $labels{$_[0]}[1];
+    my $fmt = "%s + (%s/11)x for x in <0,11.2> using color:blue and weight:2";
+    return FEQ(sprintf($fmt,  $lo, $hi - $lo));
 }
 $gr = init_graph(0,-5,12,5,'axes'=>[0,0],'grid'=>[12,10],'size'=>[333,277.5]);
 $alt = '"Graph of negative sloping line with y-intercept at C."';
@@ -34,6 +36,7 @@ $gr->lb(new Label(11.9, 0, "t", 'black', 'right', 'top'));
 
 Context("Ordering");
 Letters(keys %labels);
+Context()->strings->add("NA");
 
 $lt = "<"; $gt = ">"; $qt = '"';
 %subs = ('"' => '[$qt]*', "<" => '[$lt]*', ">" => '[$gt]*');
@@ -52,14 +55,18 @@ sub question {
 		     "Largest Negative", $_[1]);
     $title = "Use equal (=) or greater (>) to rank letters; for example, 'A>B=C'";
     $div = sprintf('<div align="center" title="%s" style="height:50px;">', $title);
-    return $prompt . tagsub($div) . $blank . tagsub('</div>');
+    $NA = "_Enter_ *NA* _if the ranking cannot be determined using the information provided._";
+    return ($prompt . tagsub($div) . $blank . tagsub('</div>') .
+            tagsub('<div align="center">') . $NA . tagsub('</div>'));
 }
+
+$solution = "F>A>E>B=D>C";
 
 BEGIN_PGML
 
 >> [@ image(insertGraph($gr), width=>450, extra_html_tags=>$tags) @]* <<
     ---
-[@ question("distance traveled by", "F>A>E>B=D>C") @]**
+[@ question("distance traveled by", $solution) @]**
 
 Explain the reason for your ranking:
 
@@ -68,7 +75,7 @@ END_PGML
 $chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
 
 BEGIN_PGML_HINT
-Answers can only include: {*\ [@ $chars @] \ *};
+Answers can only include: {*\ [@ $chars @] \ *}, or *NA*.
 END_PGML_HINT
 
 
@@ -76,7 +83,7 @@ END_PGML_HINT
 BEGIN_PGML_SOLUTION
 *SOLUTION*
 
-[``` F>A>E>D=B>C```]
+[```[$solution]```]
 
 The faster you travel, the more distance you travel. The direction you
 are headed is not important. Therefore, [`F`] travels the largest
