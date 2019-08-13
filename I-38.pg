@@ -39,42 +39,24 @@ Context("Ordering");
 Letters(keys %labels);
 Context()->strings->add("NA");
 
-$lt = "<"; $gt = ">"; $qt = '"';
-%subs = ('"' => '[$qt]*', "<" => '[$lt]*', ">" => '[$gt]*');
-sub tagsub {
-     my $val = $_[0];
-     for my $i (keys %subs) {
-        $val =~ s/$i/$subs{$i}/g;
-     }
-     return $val;
-}
-
-sub question {
-    $prompt = sprintf("Rank these graphs on the basis of the %s each object.", $_[0]);
-    $blank = sprintf("Largest Positive".
-                     " [__]{answer=>Compute('%s'), width=>15} ".
-		     "Largest Negative", $_[1]);
-    $title = "Use equal (=) or greater (>) to rank letters; for example, 'A>B=C'";
-    $div = sprintf('<div align="center" title="%s" style="height:50px;">', $title);
-    $NA = "_Enter_ *NA* _if the ranking cannot be determined using the information provided._";
-    return ($prompt . tagsub($div) . $blank . tagsub('</div>') .
-            tagsub('<div align="center">') . $NA . tagsub('</div>'));
-}
-
 $solution = "F>A>E>B=D>C";
 
 BEGIN_PGML
 
 >> [@ image(insertGraph($gr), width=>450, extra_html_tags=>$tags) @]* <<
-    ---
 
-[@ question("distance traveled by", $solution) @]**
+Rank these graphs on the basis of the distance traveled by each object.
+
+>> Largest [__]{answer=>Compute($solution), width=>15} Smallest <<
+
+>> _Enter_ *NA* _if the ranking cannot be determined using the information provided._ <<
 
 Explain the reason for your ranking:
 
 >> [@ ANS(essay_cmp); essay_box(5,50); @]* <<
 
 END_PGML
+
 
 $chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
 
