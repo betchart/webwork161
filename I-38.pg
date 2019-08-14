@@ -25,9 +25,8 @@ $gr = init_graph(0,-5,12,5,'axes'=>[0,0],'grid'=>[12,10],'size'=>[333,277.5]);
 $alt = '"Graph of negative sloping line with y-intercept at C."';
 $tags = sprintf('title=%s alt=%s', $alt, $alt);
 
-@args = ($gr, );
-push @args, (map { makeF($_) } (keys %labels));
-plot_functions(@args);
+@funcs = map makeF($_), (keys %labels);
+plot_functions( ($gr,), @funcs);
 $gr->lb('reset');
 
 foreach (keys %labels) {
