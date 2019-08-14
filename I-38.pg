@@ -1,0 +1,90 @@
+DOCUMENT();
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+    "PGgraphmacros.pl",
+    "PGauxiliaryFunctions.pl",
+    "contextOrdering.pl",
+    "PGessaymacros.pl",
+  );
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$refreshCachedImages=1;
+my %labels = ( A => [3,3,], B => [0,2,], C => [0,1,],
+               D => [0,-2,], E => [-1,-3,], F => [-4,-4,] );
+sub makeF {
+    my $lo = $labels{$_[0]}[0];
+    my $hi = $labels{$_[0]}[1];
+    my $fmt = "%s + (%s/11)x for x in <0,11.2> using color:blue and weight:2";
+    return FEQ(sprintf($fmt,  $lo, $hi - $lo));
+}
+$gr = init_graph(0,-5,12,5,'axes'=>[0,0],'grid'=>[12,10],'size'=>[333,277.5]);
+$alt = '"Velocity vs time graph of six lines."';
+$tags = sprintf('title=%s alt=%s', $alt, $alt);
+
+@funcs = map makeF($_), (keys %labels);
+plot_functions( ($gr,), @funcs);
+
+$gr->lb('reset');
+$gr->lb(new Label(0.2, 5, "v", 'black', 'left', 'top'));
+$gr->lb(new Label(11.9, 0, "t", 'black', 'right', 'top'));
+foreach (keys %labels) {
+  $gr->lb(new Label(11.6, $labels{$_}[1], $_, 'black', 'center', 'middle', 'giant'));
+}
+
+Context("Ordering");
+Letters(keys %labels);
+Context()->strings->add("NA");
+
+$solution = "F>A>E>B=D>C";
+
+BEGIN_PGML
+
+[$BR]*
+
+Below are *velocity vs. time* graphs for six different objects.
+
+>> [@ image(insertGraph($gr), width=>450, extra_html_tags=>$tags) @]* <<
+
+Rank these graphs on the basis of the distance traveled by each object.
+
+>> Largest [__]{answer=>Compute($solution), width=>15} Smallest <<
+
+>> _Enter_ *NA* _if the ranking cannot be determined using the information provided._ <<
+
+Explain the reason for your ranking:
+
+>> [@ ANS(essay_cmp); essay_box(5,50); @]* <<
+
+END_PGML
+
+
+$chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
+
+BEGIN_PGML_HINT
+Answers can only include: {*\ [@ $chars @] \ *}, or *NA*.
+END_PGML_HINT
+
+
+
+BEGIN_PGML_SOLUTION
+*SOLUTION*
+
+[```[$solution]```]
+
+The faster you travel, the more distance you travel. The direction you
+are headed is not important. Therefore, [`F`] travels the largest
+distance because it is always moving the fastest, followed by
+[`A`]. [`E`] is consistently traveling faster than [`D`], so it covers
+a larger distance than [`D`]. [`B`] and [`D`] always travel at the
+same speed (although in opposite directions) so they cover the same
+distance, therefore they are ranked as equal. [`C`] travels the slowest
+so it covers the least distance.
+
+END_PGML_SOLUTION
+
+
+ENDDOCUMENT();
