@@ -22,7 +22,7 @@ sub makeF {
     return FEQ(sprintf($fmt,  $lo, $hi - $lo));
 }
 $gr = init_graph(0,-5,12,5,'axes'=>[0,0],'grid'=>[12,10],'size'=>[333,277.5]);
-$alt = '"Graph of negative sloping line with y-intercept at C."';
+$alt = '"Velocity vs time graph of six lines."';
 $tags = sprintf('title=%s alt=%s', $alt, $alt);
 
 @funcs = map makeF($_), (keys %labels);
