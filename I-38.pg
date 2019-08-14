@@ -27,13 +27,13 @@ $tags = sprintf('title=%s alt=%s', $alt, $alt);
 
 @funcs = map makeF($_), (keys %labels);
 plot_functions( ($gr,), @funcs);
-$gr->lb('reset');
 
+$gr->lb('reset');
+$gr->lb(new Label(0.2, 5, "v", 'black', 'left', 'top'));
+$gr->lb(new Label(11.9, 0, "t", 'black', 'right', 'top'));
 foreach (keys %labels) {
   $gr->lb(new Label(11.6, $labels{$_}[1], $_, 'black', 'center', 'middle', 'giant'));
 }
-$gr->lb(new Label(0.2, 5, "v", 'black', 'left', 'top'));
-$gr->lb(new Label(11.9, 0, "t", 'black', 'right', 'top'));
 
 Context("Ordering");
 Letters(keys %labels);
