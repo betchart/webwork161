@@ -43,6 +43,10 @@ $solution = "F>A>E>B=D>C";
 
 BEGIN_PGML
 
+[$BR]*
+
+Below are *velocity vs. time* graphs for six different objects.
+
 >> [@ image(insertGraph($gr), width=>450, extra_html_tags=>$tags) @]* <<
 
 Rank these graphs on the basis of the distance traveled by each object.
