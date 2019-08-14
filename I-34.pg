@@ -1,3 +1,22 @@
+# DESCRIPTION
+# Spiral Physics 161, Model I
+# Ranking of kinematics graph
+# WeBWorK problem implemented by Burton Betchart,
+# <bbetchart(at)monroecc(dot)edu>
+# ENDDESCRIPTION
+
+## DBsubject('Physics')
+## DBchapter('One-dimensional particle')
+## DBsection('Kinematics')
+## KEYWORDS('')
+## TitleText1('Spiral Physics 161')
+## EditionText1('')
+## AuthorText1('Paul D\'Alessandris')
+## Section1('Model I: Kinematics')
+## Problem1('I-34')
+## Author('Burton Betchart')
+## Institution('Monroe Community College')
+
 DOCUMENT();
 loadMacros(
     "PGstandard.pl",
