@@ -1,0 +1,106 @@
+DOCUMENT();
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+    "PGgraphmacros.pl",
+    "PGauxiliaryFunctions.pl",
+    "contextOrdering.pl",
+    "PGessaymacros.pl",
+  );
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$refreshCachedImages=1;
+my %labels = ( A => [3,3,], B => [0,2,], C => [0,1,],
+               D => [-3,-1,], E => [-1,-3,], F => [-4,-4,] );
+sub makeF {
+    my $lo = $labels{$_[0]}[0];
+    my $hi = $labels{$_[0]}[1];
+    my $fmt = "%s + (%s/11)x for x in <0,11.2> using color:blue and weight:2";
+    return FEQ(sprintf($fmt,  $lo, $hi - $lo));
+}
+$gr = init_graph(0,-5,12,5,'axes'=>[0,0],'grid'=>[12,10],'size'=>[333,277.5]);
+$alt = '"Velocity vs time graph of six lines."';
+$tags = sprintf('title=%s alt=%s', $alt, $alt);
+
+@funcs = map makeF($_), (keys %labels);
+plot_functions( ($gr,), @funcs);
+
+$gr->lb('reset');
+$gr->lb(new Label(0.2, 5, "v", 'black', 'left', 'top'));
+$gr->lb(new Label(11.9, 0, "t", 'black', 'right', 'top'));
+foreach (keys %labels) {
+  $gr->lb(new Label(11.6, $labels{$_}[1], $_, 'black', 'center', 'middle', 'giant'));
+}
+
+Context("Ordering");
+Letters(keys %labels);
+Context()->strings->add("NA");
+
+$b_solution = "B=D>C>A=F>E";
+
+BEGIN_PGML
+
+[$BR]*
+
+Below are *velocity vs. time* graphs for six different objects.
+
+>> [@ image(insertGraph($gr), width=>450, extra_html_tags=>$tags) @]* <<
+
+a. Rank these graphs on the basis of the final position of the object.
+
+    >> Largest Positive [__]{answer=>Compute("NA"), width=>15} Largest Negative <<
+
+    >> _Enter_ *NA* _if the ranking cannot be determined using the information provided._ <<
+
+    Explain the reason for your ranking:
+
+    >> [@ ANS(essay_cmp); essay_box(5,50); @]* <<
+
+    [$BR]*
+    ---
+
+b. Rank these graphs on the basis of the acceleration of the object.
+
+    >> Largest Positive [__]{answer=>Compute($b_solution), width=>15} Largest Negative <<
+
+    >> _Enter_ *NA* _if the ranking cannot be determined using the information provided._ <<
+
+    Explain the reason for your ranking:
+
+    >> [@ ANS(essay_cmp); essay_box(5,50); @]* <<
+
+END_PGML
+
+
+$chars = "> = " . join(" ", PGsort( sub {$_[0] lt $_[1]}, keys %labels));
+
+BEGIN_PGML_HINT
+Ranking answers can only include: {*\ [@ $chars @] \ *}, or *NA*.
+END_PGML_HINT
+
+
+
+BEGIN_PGML_SOLUTION
+*SOLUTION*
+
+a. *NA*
+
+    Without knowing the initial position of an object, we cannot know
+    from just a velocity vs time graph the final position of the object.
+
+    [$BR]*
+
+b. [```[$b_solution]```]
+
+    Acceleration is represented by the slope of a velocity vs time graph.
+    [`A`] and [`F`] both have zero acceleration, while [`E`] has negative
+    acceleration.  [`B`] and [`D`] have equal positive acceleration, which is
+    greater than the positive acceleration of [`C`].
+
+END_PGML_SOLUTION
+
+
+ENDDOCUMENT();
