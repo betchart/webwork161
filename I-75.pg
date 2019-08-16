@@ -1,0 +1,116 @@
+# DESCRIPTION
+# Spiral Physics 161, Model I
+# Ranking of kinematics graph
+# WeBWorK problem implemented by Burton Betchart,
+# <bbetchart(at)monroecc(dot)edu>
+# ENDDESCRIPTION
+
+## DBsubject('Physics')
+## DBchapter('One-dimensional particle')
+## DBsection('Dynamics')
+## KEYWORDS('')
+## TitleText1('Spiral Physics 161')
+## EditionText1('')
+## AuthorText1('Paul D\'Alessandris')
+## Section1('Model I: Dynamics')
+## Problem1('I-75')
+## Author('Burton Betchart')
+## Institution('Monroe Community College')
+
+DOCUMENT();
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+    "PGgraphmacros.pl",
+    "PGauxiliaryFunctions.pl",
+    "PGessaymacros.pl",
+    "parserPopUp.pl"
+  );
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$lt = "<"; $gt = ">"; $qt = '"';
+%subs = ('"' => '[$qt]*', "<" => '[$lt]*', ">" => '[$gt]*');
+sub tagsub {
+     my $val = $_[0];
+     for my $i (keys %subs) {
+        $val =~ s/$i/$subs{$i}/g;
+     }
+     return $val;
+}
+
+$fsob = "[`F_\mathrm{string\ on\ block}`]";
+$fgob = "[`F_\mathrm{gravity\ on\ block}`]";
+
+sub question {
+    $blank = sprintf($fsob .
+                     " [__]{PopUp([' ','>','=','<','?'], '%s')} ".
+		     $fgob, $_[0]);
+    return $blank;
+}
+sub answer { return $fsob . " " . $_[0] . " " . $fgob;}
+
+$explain = ("Explanation:" . tagsub(' <div align="center">') .
+	    "[@ ANS(essay_cmp); essay_box(4,35); @]*" .
+	    tagsub(' </div><br/>')
+	    );
+
+BEGIN_PGML
+
+[$BR]*
+
+A block hangs from the ceiling of an elevator by a string. For each of
+the following situations, select the correct relationship symbol
+between the magnitude of the force of the string on the block and the
+magnitude of the force of gravity on the block, and explain your
+reasoning.
+
+a. The elevator is at rest.
+    >> [@ question('=') @]** <<
+    [$explain]**
+
+b. The elevator is moving upward at a constant speed.
+    >> [@ question('=') @]** <<
+    [$explain]**
+
+c. The elevator is moving downward at a decreasing speed.
+    >> [@ question('>') @]** <<
+    [$explain]**
+
+d. The elevator is moving upward at an increacing speed
+    >> [@ question('>') @]** <<
+    [$explain]**
+
+END_PGML
+
+
+BEGIN_PGML_SOLUTION
+*SOLUTION*
+
+a. When the elevator is at rest,
+    >> [@ answer('=') @]** <<
+    Since the block is not accelerating, the two forces acting on it
+    must be equal in magnitude.
+
+b. When the elevator is moving upward at constant speed,
+    >> [@ answer('=') @]** <<
+    Since the block is still not accelerating, the two forces acting
+    on it must be equal in magnitude.
+
+c. When the elevator is moving downward at a decreasing speed.
+    >> [@ answer('>') @]** <<
+    Since the block is accelerating upward, the force directed upward
+    (the force of the string) must be larger than the force directed
+    downward (the force of gravity).
+
+d. When the elevator is moving upward at an increacing speed
+    >> [@ answer('>') @]** <<
+    The block is accelerating upward, so the force directed upward
+    must be larger than the force directed downward.
+
+END_PGML_SOLUTION
+
+
+ENDDOCUMENT();
